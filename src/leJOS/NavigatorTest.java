@@ -35,21 +35,22 @@ public class NavigatorTest {
 		// i.e. 2.8 cm
 		// the offset number is the distance between the center of wheel to
 		// the center of robot, i.e. half of track width
-		Wheel wheel1 = WheeledChassis.modelWheel(LEFT_MOTOR, 5.5).offset(-6.5);
-		Wheel wheel2 = WheeledChassis.modelWheel(RIGHT_MOTOR, 5.5).offset(6.5);
+		Wheel wheel1 = WheeledChassis.modelWheel(LEFT_MOTOR, 5.5).offset(-6.9);
+		Wheel wheel2 = WheeledChassis.modelWheel(RIGHT_MOTOR, 5.5).offset(6.9);
 
 		// set up the chassis type, i.e. Differential pilot
 		Chassis chassis = new WheeledChassis(new Wheel[] { wheel1, wheel2 },
 				WheeledChassis.TYPE_DIFFERENTIAL);
 		MovePilot pilot = new MovePilot(chassis);
-
+		//pilot.setLinearSpeed(300);
+		pilot.travel(200);
 		Navigator navtest = new Navigator(pilot);
 		
 		// define a new waypoint as destination 
-		Waypoint wp = new Waypoint (50, 50); 
+		//Waypoint wp = new Waypoint (0, 150); 
 		
 		// robot moves to the destination waypoint
-		navtest.goTo(wp);
+		//navtest.goTo(wp);
 		
 		// block the thread until a button is pressed
 		buttons.waitForAnyPress();

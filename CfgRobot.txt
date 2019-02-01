@@ -7,4 +7,8 @@ Ports :
 	S1 :	Capteur Ultrason
 	S2 :	Capteur Pince
 	S3 :	Capteur Couleur
-	S4 :	
+	S4 :
+
+Roues :
+	Diamètre : 5.5cm
+	Ecartement par rapport au milieu : 6.9cm
