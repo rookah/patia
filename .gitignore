@@ -1,0 +1,6 @@
+*.jar
+*.swp
+/bin
+/.classpath
+/.project
+/.settings
