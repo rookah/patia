@@ -4,7 +4,7 @@ Ports :
 	C :
 	D :	Moteur Droit
 
-	1 :	Capteur Ultrason
-	2 :	Capteur Pince
-	3 :	Capteur Couleur
-	4 :	
+	S1 :	Capteur Ultrason
+	S2 :	Capteur Pince
+	S3 :	Capteur Couleur
+	S4 :	
