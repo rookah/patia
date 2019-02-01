@@ -1,0 +1,10 @@
+Ports :
+	A :	Moteur Gauche
+	B :	Moteur Pince //Forward : Ouverture
+	C :
+	D :	Moteur Droit
+
+	1 :	Capteur Ultrason
+	2 :	Capteur Pince
+	3 :	Capteur Couleur
+	4 :	
