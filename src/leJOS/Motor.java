@@ -12,7 +12,7 @@ public class Motor
         log("Program Starting");
 
         EV3LargeRegulatedMotor motor = new EV3LargeRegulatedMotor(MotorPort.B);
-        motor.setSpeed(500);
+        motor.setSpeed(600);
 
         log("Forward motion");
         motor.forward();
