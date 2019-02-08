@@ -42,7 +42,6 @@ public class NavigatorTest {
 		Chassis chassis = new WheeledChassis(new Wheel[] { wheel1, wheel2 },
 				WheeledChassis.TYPE_DIFFERENTIAL);
 		MovePilot pilot = new MovePilot(chassis);
-		//pilot.setLinearSpeed(300);
 		pilot.travel(200);
 		Navigator navtest = new Navigator(pilot);
 		
