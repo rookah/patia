@@ -1,4 +1,4 @@
-package leJOS;
+package tests;
 
 import lejos.hardware.lcd.LCD;
 import lejos.utility.Delay;

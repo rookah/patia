@@ -1,4 +1,4 @@
-package leJOS;
+package tests;
 
 //***********************************************************************************
 //Wei Lu Java Robotics Programming with Lego EV3 		ch4p1.java
