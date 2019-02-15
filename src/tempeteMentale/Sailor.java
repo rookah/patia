@@ -6,6 +6,7 @@ import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.hardware.port.MotorPort;
 import lejos.hardware.port.Port;
 import lejos.hardware.sensor.EV3UltrasonicSensor;
+import lejos.robotics.SampleProvider;
 import lejos.robotics.chassis.Chassis;
 import lejos.robotics.chassis.Wheel;
 import lejos.robotics.chassis.WheeledChassis;
@@ -24,12 +25,16 @@ public class Sailor {
 	private final Chassis chassis;
 	private final MovePilot pilot;
 	private final Navigator navigator;
+	private SampleProvider sonicDistance;
+	private float[] sample;
 
 	
 	public Sailor(){
 		ev3Brick = (EV3) BrickFinder.getLocal();
-		sonicSensorPort = ev3Brick.getPort("S1");
+		sonicSensorPort = ev3Brick.getPort("S4");
 		sonicSensor = new EV3UltrasonicSensor(sonicSensorPort);
+		sonicDistance = sonicSensor.getDistanceMode();
+		float[] sample = new float[sonicDistance.sampleSize()];
 		left_motor = new EV3LargeRegulatedMotor(MotorPort.A);
 		right_motor = new EV3LargeRegulatedMotor(MotorPort.D);
 		wheel_left = WheeledChassis.modelWheel(left_motor, 5.5).offset(-6.9);
@@ -40,8 +45,29 @@ public class Sailor {
 	}
 	
 	public void moveTo(Waypoint wp){
+		MouvementListener ml = new MouvementListener(wp.getX(), wp.getY(), navigator);
+		pilot.addMoveListener(ml);
 		navigator.goTo(wp);
+		int nbRotate = 0;
+		while(obstacleInFront()) {
+			ml.setEvitement(true);
+			navigator.rotateTo(90);
+			nbRotate++;
+			ml.setNbRotate(nbRotate);
+			if(!obstacleInFront()){
+				navigator.goTo(0, 20);
+			}
+		}
+		ml.setEvitement(false);
+		navigator.goTo(new Waypoint(ml.getWpX(), ml.getWpY()));
 	}
 	
+	public boolean obstacleInFront(){
+		if(sonicDistance != null){
+			sonicDistance.fetchSample(sample, 0);
+			return sample[0] < 20;
+		}
+		return false;
+	}
 	
 }
