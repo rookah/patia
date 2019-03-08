@@ -18,7 +18,7 @@ public class TestPlanner {
 		final ProblemFactory factory = ProblemFactory.getInstance();
 		ErrorManager errorManager = null;
 		try {
-		  errorManager = factory.parse(new File("/home/bozzo/workspace/RobotPalets/src/leJOS/logistics.pddl"), new File("/home/bozzo/workspace/RobotPalets/src/leJOS/problem.pddl"));
+		  errorManager = factory.parse(new File("src/tests/logistics.pddl"), new File("src/tests/problem.pddl"));
 		} catch (IOException e) {
 		  System.out.println("Unexpected error when parsing the PDDL planning problem description.");
 		  System.exit(0);
