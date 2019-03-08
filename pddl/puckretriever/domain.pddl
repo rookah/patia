@@ -1,22 +1,30 @@
 (define (domain puck-retriever)
  (:requirements :strips :typing)
- (:types node puck)
+ (:types node puck - object)
  (:predicates
   (at ?n - node)
-  (start-node ?n - node)
   (goal-node ?n - node)
   (puck-at ?p - puck ?n - node)
   (link ?n1 - node ?n2 - node)
-  (holding ?p)
+  (holding ?p - puck)
   (gripper-empty)
  )
 
- (:action move
+ (:action move1
   :parameters (?from - node ?to - node)
   :precondition (and
-	  (not (start-node ?to))
 	  (at ?from)
-	  (or (link ?from ?to) (link ?to ?from)))
+	  (link ?from ?to))
+  :effect (and
+	  (not (at ?from))
+	  (at ?to))
+ )
+
+ (:action move2
+  :parameters (?from - node ?to - node)
+  :precondition (and
+	  (at ?from)
+	  (link ?to ?from))
   :effect (and
 	  (not (at ?from))
 	  (at ?to))
@@ -25,8 +33,7 @@
  (:action pick-up
   :parameters (?p - puck ?n - node)
   :precondition (and
-	  (not (start-node ?n))
-	  (not (goal-node ?n))
+	  (at ?n)
 	  (puck-at ?p ?n)
 	  (gripper-empty))
   :effect (and
@@ -38,11 +45,11 @@
  (:action drop-down
   :parameters (?p - puck ?n - node)
   :precondition (and
+	  (at ?n)
 	  (goal-node ?n)
-	  (not (gripper-empty))
 	  (holding ?p))
   :effect (and
 	  (gripper-empty)
-	  (not (holding ?puck))
-	  (puck-at ?puck ?p))
+	  (not (holding ?p))
+	  (puck-at ?p ?n))
  ))

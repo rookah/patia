@@ -7,9 +7,9 @@
 	a2 - node
 	a3 - node
 	b1 - node
-	b1 - node
 	b2 - node
-	c3 - node
+	b3 - node
+	c1 - node
 	c2 - node
 	c3 - node
 	p1 - puck
@@ -24,26 +24,38 @@
    )
    (:init
 	(gripper-empty)
-	(start-node start)
 	(goal-node goal)
-	(puck-at a1 p1)
-	(puck-at a2 p2)
-	(puck-at a3 p3)
-	(puck-at b1 p4)
-	(puck-at b2 p5)
-	(puck-at b3 p6)
-	(puck-at c1 p7)
-	(puck-at c2 p8)
-	(puck-at c3 p9)
+	(at start)
+	(link start a1)
+	(link start a2)
+	(link start a3)
+	(link a1 b1)
+	(link a2 b2)
+	(link a3 b3)
+	(link b1 c1)
+	(link b2 c2)
+	(link b3 c3)
+	(link c1 goal)
+	(link c2 goal)
+	(link c3 goal)
+	(puck-at p1 a1)
+	(puck-at p2 a2)
+	(puck-at p3 a3)
+	(puck-at p4 b1)
+	(puck-at p5 b2)
+	(puck-at p6 b3)
+	(puck-at p7 c1)
+	(puck-at p8 c2)
+	(puck-at p9 c3)
    )
    (:goal
 	(and 
-	 (at p1 goal)
-	 (at p2 goal)
-	 (at p3 goal)
-	 (at p4 goal)
-	 (at p5 goal)
-	 (at p6 goal)
-	 (at p7 goal)
-	 (at p8 goal)
-	 (at p9 goal))))
+	 (puck-at p1 goal)
+	 (puck-at p2 goal)
+	 (puck-at p3 goal)
+	 (puck-at p4 goal)
+	 (puck-at p5 goal)
+	 (puck-at p6 goal)
+	 (puck-at p7 goal)
+	 (puck-at p8 goal)
+	 (puck-at p9 goal))))
