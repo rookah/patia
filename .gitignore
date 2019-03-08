@@ -1,5 +1,6 @@
 *.jar
 *.swp
+*.pdf
 /bin
 /.classpath
 /.project
