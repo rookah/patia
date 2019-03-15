@@ -2,10 +2,12 @@ package tempeteMentale;
 
 import lejos.hardware.BrickFinder;
 import lejos.hardware.ev3.EV3;
+import lejos.hardware.lcd.TextLCD;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.hardware.port.MotorPort;
 import lejos.hardware.port.Port;
 import lejos.hardware.sensor.EV3UltrasonicSensor;
+import lejos.hardware.sensor.SensorMode;
 import lejos.robotics.SampleProvider;
 import lejos.robotics.chassis.Chassis;
 import lejos.robotics.chassis.Wheel;
@@ -26,15 +28,14 @@ public class Sailor {
 	private final MovePilot pilot;
 	private final Navigator navigator;
 	private SampleProvider sonicDistance;
-	private float[] sample;
+	private Catcher catcher;
+	public boolean pinceFermee;
 
 	
 	public Sailor(){
 		ev3Brick = (EV3) BrickFinder.getLocal();
 		sonicSensorPort = ev3Brick.getPort("S4");
 		sonicSensor = new EV3UltrasonicSensor(sonicSensorPort);
-		sonicDistance = sonicSensor.getDistanceMode();
-		float[] sample = new float[sonicDistance.sampleSize()];
 		left_motor = new EV3LargeRegulatedMotor(MotorPort.A);
 		right_motor = new EV3LargeRegulatedMotor(MotorPort.D);
 		wheel_left = WheeledChassis.modelWheel(left_motor, 5.5).offset(-6.9);
@@ -42,32 +43,48 @@ public class Sailor {
 		chassis = new WheeledChassis(new Wheel[] { wheel_left, wheel_right }, WheeledChassis.TYPE_DIFFERENTIAL);
 		pilot = new MovePilot(chassis);
 		navigator = new Navigator(pilot);
+		catcher = new Catcher();
+		pinceFermee = false;
 	}
 	
 	public void moveTo(Waypoint wp){
-		MouvementListener ml = new MouvementListener(wp.getX(), wp.getY(), navigator);
-		pilot.addMoveListener(ml);
 		navigator.goTo(wp);
-		int nbRotate = 0;
-		while(obstacleInFront()) {
-			ml.setEvitement(true);
-			navigator.rotateTo(90);
-			nbRotate++;
-			ml.setNbRotate(nbRotate);
-			if(!obstacleInFront()){
-				navigator.goTo(0, 20);
+		while(!navigator.pathCompleted()){
+			if(obstacleInFront()) {
+				navigator.stop();
+				pilot.rotate(-90);
+				pilot.travel(40);	
+			}
+			navigator.followPath();
+			SensorMode toucher = catcher.getBumperSensor().getTouchMode();
+			float[] sample = new float[toucher.sampleSize()];
+			toucher.fetchSample(sample, 0);
+			if (sample[0] == 1 && !pinceFermee){
+				navigator.stop();
+				catcher.catchPuck();
+				pinceFermee = true;
+				//Request new plan
 			}
 		}
-		ml.setEvitement(false);
-		navigator.goTo(new Waypoint(ml.getWpX(), ml.getWpY()));
+		if (pinceFermee) {
+			catcher.releasePuck();
+			pilot.travel(-40);
+			//Request new plan
+		}
 	}
 	
 	public boolean obstacleInFront(){
-		if(sonicDistance != null){
-			sonicDistance.fetchSample(sample, 0);
-			return sample[0] < 20;
-		}
-		return false;
+		//TextLCD lcddisplay = ev3Brick.getTextLCD();
+		sonicDistance = sonicSensor.getDistanceMode();
+		float[] sample = new float[sonicDistance.sampleSize()];
+		sonicDistance.fetchSample(sample, 0);
+		//lcddisplay.drawString("distance: " + sample[0], 0, 1);
+		return sample[0] < 0.2;
+		
+	}
+	
+	public Catcher getCatcher(){
+		return catcher;
 	}
 	
 }

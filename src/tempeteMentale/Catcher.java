@@ -21,24 +21,21 @@ public class Catcher {
 		bumperSensor = new EV3TouchSensor(gripSensorPort);
 	}
 	
-	public boolean catchPuck(){		
+	public void catchPuck(){		
 		gripMotor.setSpeed(600);
-		gripMotor.forward();
-		Delay.msDelay(3000);
+		gripMotor.backward();
+		Delay.msDelay(100);
 		gripMotor.stop();
-		
-		SensorMode toucher = bumperSensor.getTouchMode();
-		float[] sample = new float[toucher.sampleSize()];
-		
-		toucher.fetchSample(sample, 0);
-		return sample[0] == 1;
 	}
 	
 	public void releasePuck(){
 		gripMotor.setSpeed(600);
-		gripMotor.backward();
-		Delay.msDelay(3000);
+		gripMotor.forward();
+		Delay.msDelay(100);
 		gripMotor.stop();
 	}
 	
+	public EV3TouchSensor getBumperSensor(){
+		return bumperSensor;
+	}
 }
