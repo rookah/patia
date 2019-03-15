@@ -10,21 +10,11 @@
   (gripper-empty)
  )
 
- (:action move1
+ (:action move
   :parameters (?from - node ?to - node)
   :precondition (and
 	  (at ?from)
 	  (link ?from ?to))
-  :effect (and
-	  (not (at ?from))
-	  (at ?to))
- )
-
- (:action move2
-  :parameters (?from - node ?to - node)
-  :precondition (and
-	  (at ?from)
-	  (link ?to ?from))
   :effect (and
 	  (not (at ?from))
 	  (at ?to))
