@@ -78,7 +78,7 @@ public class PlanGenerator {
 			System.exit(0);
 		}
 
-		final HSP planner = new HSP();
+		final HSP planner = new HSP(2000, HSP.DEFAULT_HEURISTIC, HSP.DEFAULT_WEIGHT, HSP.DEFAULT_STATISTICS, HSP.DEFAULT_TRACE_LEVEL);
 
 		final Plan plan = planner.search(pb);
 		if (plan != null) {
@@ -87,14 +87,6 @@ public class PlanGenerator {
 		} else {
 		    System.out.println("No plan found.");
 		}
-
-		/*plan = planner.search(pb);
-		if (plan != null) {
-		    System.out.println("Found plan as follows:");
-		    System.out.println(pb.toString(plan));
-		} else {
-		    System.out.println("No plan found.");
-		}*/
 	}
 	
 	public static void main(String args[]) {
