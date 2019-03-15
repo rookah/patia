@@ -1,5 +1,6 @@
 (define (problem puck-retrieving-1)
    (:domain puck-retriever)
+   (:requirements :strips :typing)
    (:objects
 	start - node
 	goal - node
