@@ -4,7 +4,8 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 
 public class EV3Client {
-  public int[] getPalets() 
+	
+  public static int[] getPalets() 
   {
     try 
     {
@@ -59,4 +60,5 @@ public class EV3Client {
     }
 	return null;
   }
+ 
 }
