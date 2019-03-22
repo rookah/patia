@@ -1,4 +1,4 @@
-package tests;
+package tempeteMentale;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;

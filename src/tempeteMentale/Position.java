@@ -1,4 +1,4 @@
-package tests;
+package tempeteMentale;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,7 +16,6 @@ public class Position {
 																			new Point("c3", 152, 84))												
 			
 															);
-	static Hashtable<String, int[]> numbers = new Hashtable<String, int[]>();
 	public static void main(String[] args) {
 		// Recuperer la liste des position 
 		ArrayList<Point> listePositions = ListePos();
