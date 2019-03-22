@@ -6,7 +6,6 @@ import java.io.IOException;
 import fr.uga.pddl4j.encoding.CodedProblem;
 import fr.uga.pddl4j.parser.ErrorManager;
 import fr.uga.pddl4j.planners.ProblemFactory;
-import fr.uga.pddl4j.planners.statespace.StateSpacePlanner;
 import fr.uga.pddl4j.planners.statespace.hsp.HSP;
 import fr.uga.pddl4j.util.Plan;
 
