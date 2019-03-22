@@ -91,15 +91,6 @@ public class PlanGenerator {
 		opIndex = 0;
 	}
 	
-	/**
-	 * Return the list of operations to do.
-	 * @param plan the plan to extract actions from
-	 * @return
-	 */
-	public List getPlanOperations(Plan plan) {
-		return plan.actions();
-	}
-	
 	public String getNextOperation() {
 		if (opIndex > currentPlan.actions().size())
 			return null;
