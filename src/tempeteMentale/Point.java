@@ -1,4 +1,4 @@
-package tests;
+package tempeteMentale;
 
 public class Point {
 	String id; 
