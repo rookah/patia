@@ -3,6 +3,7 @@ package tempeteMentale;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 
 import fr.uga.pddl4j.encoding.CodedProblem;
 import fr.uga.pddl4j.parser.Domain;
@@ -11,12 +12,16 @@ import fr.uga.pddl4j.parser.Parser;
 import fr.uga.pddl4j.parser.Problem;
 import fr.uga.pddl4j.planners.ProblemFactory;
 import fr.uga.pddl4j.planners.statespace.hsp.HSP;
+import fr.uga.pddl4j.util.BitOp;
 import fr.uga.pddl4j.util.Plan;
 
 public class PlanGenerator {
 	private Domain domain;
 	private Problem problem;
-	//private Plan plan;
+	private CodedProblem currentPb;
+	private Plan currentPlan;
+	
+	private int opIndex;
 	
 	/**
 	 * Instance of Parser to parse domain/problem files
@@ -34,30 +39,32 @@ public class PlanGenerator {
 			e.printStackTrace();
 		}
 		domain = pddl_parser.getDomain();
+		opIndex = 0;
 	}
 	
 	/**
-	 * Generate the problem file depending on the status of the field
+	 * Generate the problem file depending on the status of the field (puck position)
 	 */
-	public void GenerateProblem() {
+	private void GenerateProblem() {
 		// Parse the "base problem" file to build upon
 		File base_problem_file = new File("pddl/puckretriever/problem_sample.pddl");
-		//Problem tmp_problem;
 		try {
 			pddl_parser.parseProblem(base_problem_file);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-		problem = pddl_parser.getProblem();
 		
-		//TODO field info
+		problem = pddl_parser.getProblem();
 	}
 	
-	public void GeneratePlan() {
+	/**
+	 * Generate the PDDL encoded problem and plan
+	 */
+	private void GeneratePlan() {
 		final ProblemFactory factory = ProblemFactory.getInstance();
 		ErrorManager errorManager = null;
 		try {
-			errorManager = factory.parse(new File("pddl/puckretriever/domain.pddl"), new File("pddl/puckretriever/problem_sample.pddl"));
+			errorManager = factory.parseFromString(domain.toString(), problem.toString());
 		} catch (IOException e) {
 			System.out.println("Unexpected error when parsing the PDDL planning problem description.");
 			System.exit(0);
@@ -65,35 +72,48 @@ public class PlanGenerator {
 		if (!errorManager.isEmpty()) {
 			errorManager.printAll();
 			System.exit(0);
-		} else {
-			System.out.println("Parsing domain file and problem file done successfully");
 		}
+		
 		final CodedProblem pb = factory.encode();
-		System.out.println("Encoding problem done successfully (" 
-				+ pb.getOperators().size() + " ops, "
-				+ pb.getRelevantFacts().size() + " facts).");
-
+		if (pb == null) {
+			return;
+		}
 		if (!pb.isSolvable()) {
 			System.out.println("Goal can be simplified to FALSE. No search will solve it.");
-			System.exit(0);
+			return;
 		}
 
-		final HSP planner = new HSP(2000, HSP.DEFAULT_HEURISTIC, HSP.DEFAULT_WEIGHT, HSP.DEFAULT_STATISTICS, HSP.DEFAULT_TRACE_LEVEL);
-
-		final Plan plan = planner.search(pb);
-		if (plan != null) {
-		    System.out.println("Found plan as follows:");
-		    System.out.println(pb.toString(plan));
-		} else {
-		    System.out.println("No plan found.");
-		}
+		final HSP planner = new HSP(2500, HSP.DEFAULT_HEURISTIC, HSP.DEFAULT_WEIGHT, HSP.DEFAULT_STATISTICS, HSP.DEFAULT_TRACE_LEVEL);
+		Plan plan = planner.search(pb);
+		
+		currentPb = pb;
+		currentPlan = plan;
+		opIndex = 0;
 	}
 	
-	public static void main(String args[]) {
-		PlanGenerator p = new PlanGenerator();
-		//p.GenerateProblem();
-		p.GeneratePlan();
+	/**
+	 * Return the list of operations to do.
+	 * @param plan the plan to extract actions from
+	 * @return
+	 */
+	public List getPlanOperations(Plan plan) {
+		return plan.actions();
+	}
+	
+	public String getNextOperation() {
+		if (opIndex > currentPlan.actions().size())
+			return null;
+		String ret = currentPb.toShortString((BitOp) currentPlan.actions().get(opIndex));
+		opIndex++;
+		return ret;
 	}
 
+	public static void main(String args[]) {
+		PlanGenerator p = new PlanGenerator();
+		p.GenerateProblem();
+		p.GeneratePlan();
+		System.out.println(p.getNextOperation());
+		System.out.println(p.getNextOperation());
+	}
 }
 
