@@ -11,18 +11,17 @@ public class Position {
 																			new Point("b1", 46, 153),
 																			new Point("b2", 97, 153),
 																			new Point("b3", 152, 153),
-																			new Point("b4", 46, 84),
-																			new Point("b5", 97, 84),
-																			new Point("b6", 152, 84))												
+																			new Point("c1", 46, 84),
+																			new Point("c2", 97, 84),
+																			new Point("c3", 152, 84))												
 			
 															);
 	static Hashtable<String, int[]> numbers = new Hashtable<String, int[]>();
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		// Recuperer la liste des position 
 		ArrayList<Point> listePositions = ListePos();
-		for (Point i : listCordonnees) {
-		      System.out.println(i.coord1 + "  "+i.coord2);
+		for (Point i : listePositions) {
+		      System.out.println(i.id + " "+i.coord1 + "  "+i.coord2);
 		    }
 	}
 	
@@ -32,7 +31,7 @@ public class Position {
 		float coord1;
 		float coord2;
 		ArrayList<Point> listCordonneesExiste = new ArrayList<Point>();
-		
+	
 		if(tab.length >0) {
 			for(int i = 0 ; i<1;i=i+2) {	
 				coord1 = tab[i];
@@ -40,9 +39,9 @@ public class Position {
 				System.out.println("  ");	
 				
 				for (Point j : listCordonnees) {
-					if((j.getCoord1()-10<coord1)&&(coord1<j.getCoord1()+10)) {
-						if((j.getCoord2()-10<coord2)&&(coord2<j.getCoord2()+10)){
-							listCordonneesExiste.add(new Point(j.getId(), j.coord1 ,j.coord2));
+					if((j.getCoord1()-20<coord1)&&(coord1<j.getCoord1()+20)) {
+						if((j.getCoord2()-20<coord2)&&(coord2<j.getCoord2()+20)){
+							listCordonneesExiste.add(new Point(j.getId(),coord1 ,coord2));
 						}
 					}
 				}
