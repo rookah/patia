@@ -60,8 +60,8 @@ public class Sailor {
 		while(!navigator.pathCompleted()){
 			if(obstacleInFront()) {
 				navigator.stop();
-				pilot.rotate(-90);
-				pilot.travel(40);	
+				pilot.travel(-10);
+				Thread.sleep(2000);
 			}
 			navigator.followPath();
 			SensorMode toucher = catcher.getBumperSensor().getTouchMode();
@@ -79,15 +79,6 @@ public class Sailor {
 		}
 		if (pinceFermee) {
 			catcher.releasePuck();
-			/*Sound.playTone(220, 50, 30);
-			Sound.playTone(220, 50, 30);
-			Sound.playTone(220, 50, 30);
-			Sound.playTone(220, 100, 30);
-			Sound.playTone(170, 100, 30);
-			Sound.playTone(195, 100, 30);
-			Sound.playTone(220, 100, 30);
-			Sound.playTone(195, 50, 50);
-			Sound.playTone(220, 200, 50);*/
 			Sound.playTone(440, 100, 50);
 			Sound.playTone(880, 100, 60);
 			pilot.travel(-20);
