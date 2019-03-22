@@ -2,10 +2,11 @@ package tests;
 
 import lejos.hardware.lcd.LCD;
 import lejos.utility.Delay;
+import tempeteMentale.EV3Client;
 
 public class HelloWorld {
 	public static void main(String[] args) {
-		LCD.drawString("Plugin Test", 0, 4);
-		Delay.msDelay(5000);
+		EV3Client clientPalets = new EV3Client();
+		clientPalets.getPalets();		
 	}
 }

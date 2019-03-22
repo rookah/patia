@@ -15,8 +15,10 @@ import lejos.robotics.SampleProvider;
 import lejos.robotics.chassis.Chassis;
 import lejos.robotics.chassis.Wheel;
 import lejos.robotics.chassis.WheeledChassis;
+import lejos.robotics.localization.PoseProvider;
 import lejos.robotics.navigation.MovePilot;
 import lejos.robotics.navigation.Navigator;
+import lejos.robotics.navigation.Pose;
 import lejos.robotics.navigation.Waypoint;
 import lejos.hardware.Sound;
 
@@ -33,6 +35,7 @@ public class Sailor {
 	private final Chassis chassis;
 	private final MovePilot pilot;
 	private final Navigator navigator;
+	private final PoseProvider posProv;
 	private SampleProvider sonicDistance;
 	private Catcher catcher;
 	public boolean pinceFermee;
@@ -51,21 +54,27 @@ public class Sailor {
 		chassis = new WheeledChassis(new Wheel[] { wheel_left, wheel_right }, WheeledChassis.TYPE_DIFFERENTIAL);
 		pilot = new MovePilot(chassis);
 		navigator = new Navigator(pilot);
+		posProv = navigator.getPoseProvider();
+		posProv.setPose(new Pose(91,290,270)); //Position Robot ligne noire, roues derriere ligne blanche
 		catcher = new Catcher();
 		pinceFermee = false;
 	}
 	
 	public void moveTo(Waypoint wp){
 		navigator.goTo(wp);
+		SensorMode toucher = catcher.getBumperSensor().getTouchMode();
+		float[] sample = new float[toucher.sampleSize()];
 		while(!navigator.pathCompleted()){
 			if(obstacleInFront()) {
 				navigator.stop();
 				pilot.travel(-10);
-				Thread.sleep(2000);
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 			navigator.followPath();
-			SensorMode toucher = catcher.getBumperSensor().getTouchMode();
-			float[] sample = new float[toucher.sampleSize()];
 			toucher.fetchSample(sample, 0);
 			if (sample[0] == 1 && !pinceFermee){
 				navigator.stop();
@@ -74,7 +83,7 @@ public class Sailor {
 				pinceFermee = true;
 				//Request new plan
 				navigator.clearPath();
-				navigator.goTo(new Waypoint(30,30));
+				navigator.goTo(new Waypoint(posProv.getPose().getX(),150));
 			}
 		}
 		if (pinceFermee) {
@@ -84,6 +93,31 @@ public class Sailor {
 			pilot.travel(-20);
 			pinceFermee = false;
 			//Request new plan
+		} else {
+			int cycle = 0;
+			double angle = 5;
+			boolean rotateRight = true;
+			toucher.fetchSample(sample, 0);
+			pilot.setLinearSpeed(8);
+			while (sample[0] == 0 && cycle < 3) {
+				pilot.travel(-10);
+				pilot.rotate(angle);
+				pilot.travel(15);
+				if (rotateRight) {
+					angle = -(angle + 5);
+					rotateRight = false;
+				} else {
+					angle = -(angle - 5);
+					rotateRight = true;
+				}
+				cycle++;
+				toucher.fetchSample(sample, 0);
+			}
+			if (sample[0] == 1) {
+				catcher.catchPuck();
+				pinceFermee = true;
+				moveTo(new Waypoint(posProv.getPose().getX(), 150));
+			}
 		}
 	}
 	
