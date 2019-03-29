@@ -43,8 +43,6 @@ public class EV3Client {
         	int y = Integer.parseInt(coord[2]);
         	posPalets[i*2] = x;
         	posPalets[i*2+1] = y;
-        
-        	System.out.println(Integer.toString(x) + " / " + Integer.toString(y) );
         }
         
 
