@@ -6,10 +6,8 @@ import java.io.IOException;
 //import java.util.List;
 
 import fr.uga.pddl4j.encoding.CodedProblem;
-import fr.uga.pddl4j.parser.Connective;
 import fr.uga.pddl4j.parser.Domain;
 import fr.uga.pddl4j.parser.ErrorManager;
-import fr.uga.pddl4j.parser.Exp;
 import fr.uga.pddl4j.parser.Parser;
 import fr.uga.pddl4j.parser.Problem;
 import fr.uga.pddl4j.planners.ProblemFactory;
@@ -48,7 +46,7 @@ public class PlanGenerator {
 	/**
 	 * Generate the problem file depending on the status of the field (puck position)
 	 */
-	private void GenerateProblem() {
+	void GenerateProblem() {
 		// Parse the "base problem" file to build upon
 		File base_problem_file = new File("pddl/puckretriever/problem_base.pddl");
 		try {
@@ -68,7 +66,7 @@ public class PlanGenerator {
 	/**
 	 * Generate the PDDL encoded problem and plan
 	 */
-	private void GeneratePlan() {
+	void GeneratePlan() {
 		final ProblemFactory factory = ProblemFactory.getInstance();
 		ErrorManager errorManager = null;
 		try {
@@ -98,7 +96,9 @@ public class PlanGenerator {
 		currentPlan = plan;
 		opIndex = 0;
 	}
-	
+	/**
+	 * Generate the next operation
+	 **/
 	public String getNextOperation() {
 		if (opIndex >= currentPlan.actions().size())
 			return null;

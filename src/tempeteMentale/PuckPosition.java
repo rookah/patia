@@ -28,7 +28,9 @@ public class PuckPosition {
 		}
 	};
 
-
+/**
+ * Position update
+ */
 	public void updatePos() {
 		int[] tab  = EV3Client.getPalets();
 		float coord1;
@@ -52,7 +54,10 @@ public class PuckPosition {
 		}
 		pucks = listCordonneesExiste;
 	}
-
+/**
+ * Get pucks 
+ * @return
+ */
 	public HashMap<String, Point> getPucks() {
 		return this.pucks;
 	}
