@@ -94,31 +94,45 @@ public class Sailor {
 			pinceFermee = false;
 			//Request new plan
 		} else {
-			int cycle = 0;
-			double angle = 5;
-			boolean rotateRight = true;
-			toucher.fetchSample(sample, 0);
-			pilot.setLinearSpeed(8);
-			while (sample[0] == 0 && cycle < 3) {
-				pilot.travel(-10);
-				pilot.rotate(angle);
-				pilot.travel(15);
-				if (rotateRight) {
-					angle = -(angle + 5);
-					rotateRight = false;
-				} else {
-					angle = -(angle - 5);
-					rotateRight = true;
-				}
-				cycle++;
-				toucher.fetchSample(sample, 0);
-			}
-			if (sample[0] == 1) {
+			
+			if (recherchePalets()) {
 				catcher.catchPuck();
 				pinceFermee = true;
 				moveTo(new Waypoint(posProv.getPose().getX(), 150));
 			}
 		}
+	}
+	
+	public boolean recherchePalets() {
+		SensorMode toucher = catcher.getBumperSensor().getTouchMode();
+		float[] sample = new float[toucher.sampleSize()];
+		int cycle = 0;
+		int travelStep = 0;
+		double angle = 5;
+		boolean rotateRight = true;
+		boolean paletFound = false;
+		toucher.fetchSample(sample, 0);
+		pilot.setLinearSpeed(8);
+		while (!paletFound && cycle < 4) {
+			pilot.travel(-10);
+			pilot.rotate(angle);
+			while (!paletFound && travelStep < 4) {
+				pilot.travel(4);
+				toucher.fetchSample(sample, 0);
+				paletFound = sample[0] == 1;
+				travelStep++;
+			}
+			if (rotateRight) {
+				angle = -(angle + 5);
+				rotateRight = false;
+			} else {
+				angle = -(angle - 5);
+				rotateRight = true;
+			}
+			travelStep = 0;
+			cycle++;
+		}
+		return paletFound;
 	}
 	
 	public boolean obstacleInFront(){
