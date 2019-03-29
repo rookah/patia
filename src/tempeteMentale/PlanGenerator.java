@@ -3,11 +3,13 @@ package tempeteMentale;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.List;
+//import java.util.List;
 
 import fr.uga.pddl4j.encoding.CodedProblem;
+import fr.uga.pddl4j.parser.Connective;
 import fr.uga.pddl4j.parser.Domain;
 import fr.uga.pddl4j.parser.ErrorManager;
+import fr.uga.pddl4j.parser.Exp;
 import fr.uga.pddl4j.parser.Parser;
 import fr.uga.pddl4j.parser.Problem;
 import fr.uga.pddl4j.planners.ProblemFactory;
@@ -20,6 +22,7 @@ public class PlanGenerator {
 	private Problem problem;
 	private CodedProblem currentPb;
 	private Plan currentPlan;
+	private PuckPosition puckPosition;
 	
 	private int opIndex;
 	
@@ -47,7 +50,7 @@ public class PlanGenerator {
 	 */
 	private void GenerateProblem() {
 		// Parse the "base problem" file to build upon
-		File base_problem_file = new File("pddl/puckretriever/problem_sample.pddl");
+		File base_problem_file = new File("pddl/puckretriever/problem_base.pddl");
 		try {
 			pddl_parser.parseProblem(base_problem_file);
 		} catch (FileNotFoundException e) {
@@ -55,6 +58,11 @@ public class PlanGenerator {
 		}
 		
 		problem = pddl_parser.getProblem();
+		puckPosition.updatePos();
+		//Removing initial facts depending on the available pucks
+		for (String p : puckPosition.getPucks().keySet()) {
+			//if (puckPosition.getPucks().containsKey()Integer.toString(i)
+		}
 	}
 	
 	/**
@@ -92,7 +100,7 @@ public class PlanGenerator {
 	}
 	
 	public String getNextOperation() {
-		if (opIndex > currentPlan.actions().size())
+		if (opIndex >= currentPlan.actions().size())
 			return null;
 		String ret = currentPb.toShortString((BitOp) currentPlan.actions().get(opIndex));
 		opIndex++;
@@ -103,8 +111,7 @@ public class PlanGenerator {
 		PlanGenerator p = new PlanGenerator();
 		p.GenerateProblem();
 		p.GeneratePlan();
-		System.out.println(p.getNextOperation());
-		System.out.println(p.getNextOperation());
+		for (int i = 0; i < 100; i++) System.out.println(p.getNextOperation());
 	}
 }
 

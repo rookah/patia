@@ -1,21 +1,15 @@
 package tempeteMentale;
 
 public class Point {
-	String id; 
 	float coord1; 
-	float coord2; 
-	public Point(String id, float coord1, float coord2) {
+	float coord2;
+	
+	public Point(float coord1, float coord2) {
 		super();
-		this.id = id;
 		this.coord1 = coord1;
 		this.coord2 = coord2;
 	}
-	public String getId() {
-		return id;
-	}
-	public void setId(String id) {
-		this.id = id;
-	}
+	
 	public float getCoord1() {
 		return coord1;
 	}
@@ -27,10 +21,5 @@ public class Point {
 	}
 	public void setCoord2(float coord2) {
 		this.coord2 = coord2;
-	}
-
-	void valeurDansListe(float a, float b)
-	{
-		
 	}
 }
