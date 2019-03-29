@@ -24,14 +24,14 @@ public class Catcher {
 	public void catchPuck(){		
 		gripMotor.setSpeed(600);
 		gripMotor.backward();
-		Delay.msDelay(1400);
+		Delay.msDelay(1600);
 		gripMotor.stop();
 	}
 	
 	public void releasePuck(){
 		gripMotor.setSpeed(600);
 		gripMotor.forward();
-		Delay.msDelay(1400);
+		Delay.msDelay(1600);
 		gripMotor.stop();
 	}
 	

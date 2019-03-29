@@ -111,15 +111,18 @@ public class Sailor {
 		int cycle = 0;
 		int travelStep = 0;
 		double angle = 5;
+		double initialSpeed = pilot.getLinearSpeed();
 		boolean rotateRight = true;
 		boolean paletFound = false;
 		toucher.fetchSample(sample, 0);
-		pilot.setLinearSpeed(8);
+		
 		while (!paletFound && cycle < 4) {
-			pilot.travel(-10);
+			pilot.setLinearSpeed(initialSpeed);
+			pilot.travel(-20);
 			pilot.rotate(angle);
-			while (!paletFound && travelStep < 4) {
-				pilot.travel(4);
+			while (!paletFound && travelStep < 3) {
+				pilot.setLinearSpeed(8);
+				pilot.travel(8);
 				toucher.fetchSample(sample, 0);
 				paletFound = sample[0] == 1;
 				travelStep++;
@@ -134,6 +137,7 @@ public class Sailor {
 			travelStep = 0;
 			cycle++;
 		}
+		pilot.setLinearSpeed(initialSpeed);
 		return paletFound;
 	}
 	
@@ -145,7 +149,7 @@ public class Sailor {
 			anglerot = 90; //droite (a tester)
 		}
 		pilot.rotate(anglerot);
-		pilot.travel(15);
+		pilot.travel(30);
 		pilot.rotate(-anglerot);
 	}
 	
