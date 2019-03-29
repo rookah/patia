@@ -82,6 +82,7 @@ public class Sailor {
 				catcher.catchPuck();
 				pinceFermee = true;
 				//Request new plan
+				decalage();
 				navigator.clearPath();
 				navigator.goTo(new Waypoint(posProv.getPose().getX(),150));
 			}
@@ -98,6 +99,7 @@ public class Sailor {
 			if (recherchePalets()) {
 				catcher.catchPuck();
 				pinceFermee = true;
+				decalage();
 				moveTo(new Waypoint(posProv.getPose().getX(), 150));
 			}
 		}
@@ -133,6 +135,18 @@ public class Sailor {
 			cycle++;
 		}
 		return paletFound;
+	}
+	
+	public void decalage() {
+		int anglerot = 0;
+		if(posProv.getPose().getX() >= 90) {
+			anglerot = -90; //gauche (a tester)
+		}else{
+			anglerot = 90; //droite (a tester)
+		}
+		pilot.rotate(anglerot);
+		pilot.travel(15);
+		pilot.rotate(-anglerot);
 	}
 	
 	public boolean obstacleInFront(){
