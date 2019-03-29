@@ -79,7 +79,6 @@ public class PlanGenerator {
 			problem_str = problem_str.concat("(puck-at " + "p" + p + " goal)\n"); 
 		}
 		problem_str = problem_str.concat(")))");
-		System.out.println(problem_str);
 
 		File tmp = new File("pddl/puckretriever/problem.pddl");
 		PrintWriter pw;
@@ -146,6 +145,12 @@ public class PlanGenerator {
 	public void newPlan() {
 		GenerateProblem();
 		GeneratePlan();
+	}
+	
+	public static void main(String args[]) {
+		PlanGenerator p = new PlanGenerator();
+		p.newPlan();
+
 	}
 }
 

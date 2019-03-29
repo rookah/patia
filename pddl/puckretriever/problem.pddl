@@ -15,7 +15,8 @@
  c3 - node 
 pc3 - puck
 pa1 - puck
-pb1 - puck
+pb3 - puck
+pa3 - puck
 )
 (:init 
 (gripper-empty)
@@ -44,11 +45,13 @@ pb1 - puck
  (link goal c3)
 (puck-at pc3 c3)
 (puck-at pa1 a1)
-(puck-at pb1 b1)
+(puck-at pb3 b3)
+(puck-at pa3 a3)
 )
 (:goal 
 (and 
 (puck-at pc3 goal)
 (puck-at pa1 goal)
-(puck-at pb1 goal)
+(puck-at pb3 goal)
+(puck-at pa3 goal)
 )))

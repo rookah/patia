@@ -2,10 +2,14 @@ package tempeteMentale;
 
 public class PlanInterpreter {
 	
+	private PlanGenerator p;
+	
+	public PlanInterpreter() {
+		p = new PlanGenerator();
+	}
+	
 	public void interpreter() {
-		PlanGenerator p = new PlanGenerator();
-		p.GenerateProblem();
-		p.GeneratePlan();
+		p.newPlan();
 		String action ;
 		String actual; 
 		String  destination; 
@@ -18,24 +22,20 @@ public class PlanInterpreter {
 		    actual = parse[1];
 		    destination = parse[2];
 		    switch(action) {
-			    case "pick-up": 	
+			    case "pick-up":
 			    	break ;
 			    case "move": 
 			    	break; 
 			    case "drop-down": 
 			    	break; 
 			    default: 
-			    	break; 
-		    
+			    	break;   
 		    }
 		}
 	}
+	
 	public static void main(String args[]) {
 		PlanInterpreter planInterpreter = new PlanInterpreter(); 
 		planInterpreter.interpreter();
-
 	}
-	
-	
-
 }
