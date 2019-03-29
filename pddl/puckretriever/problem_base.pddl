@@ -35,10 +35,10 @@
   (link c3 b3)
   (link c1 goal)
   (link goal c1)
-  (link c2 goal)
-  (link goal c2)
-  (link c3 goal)
-  (link goal c3)
- )
- (:goal
-  (at goal)))
+	(link c2 goal)
+	(link goal c2)
+	(link c3 goal)
+(link goal c3)
+	)
+	(:goal
+	 (at goal)))

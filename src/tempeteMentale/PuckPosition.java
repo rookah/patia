@@ -12,7 +12,7 @@ public class PuckPosition {
 	private HashMap<String, Point> pucks;
 
 	static final HashMap<String, Point> listCordonnees = 
-			new HashMap<String, Point>() 
+			new HashMap<String, Point>()
 	{
 		private static final long serialVersionUID = 1L;
 		{

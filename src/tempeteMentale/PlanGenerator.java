@@ -3,7 +3,7 @@ package tempeteMentale;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-//import java.util.List;
+import java.io.PrintWriter;
 
 import fr.uga.pddl4j.encoding.CodedProblem;
 import fr.uga.pddl4j.parser.Domain;
@@ -21,14 +21,24 @@ public class PlanGenerator {
 	private CodedProblem currentPb;
 	private Plan currentPlan;
 	private PuckPosition puckPosition;
-	
+
 	private int opIndex;
-	
+
+	/**
+	 * Strings for problem generation
+	 */
+	private final String object_string = "(:objects\n start - node\n goal - node\n a1 - node\n a2 - node\n" +
+			" a3 - node \n b1 - node \n b2 - node \n b3 - node \n c1 - node \n c2 - node \n c3 - node \n";
+	private final String link_string = "(link start a1)\n  (link start a2)\n (link start a3)\n" +
+			"(link a1 b1)\n (link b1 a1)\n (link a2 b2)\n (link b2 a2)\n (link a3 b3)\n (link b3 a3)\n" +
+			" (link b1 c1)\n (link c1 b1)\n (link b2 c2)\n (link c2 b2)\n (link b3 c3)\n" +
+			" (link c3 b3)\n (link c1 goal)\n (link goal c1)\n (link c2 goal)\n (link goal c2)\n (link c3 goal)\n (link goal c3)\n"; 
+
 	/**
 	 * Instance of Parser to parse domain/problem files
 	 */
 	private final Parser pddl_parser = new Parser();
-	
+
 	/**
 	 * Generic constructor
 	 */
@@ -41,28 +51,50 @@ public class PlanGenerator {
 		}
 		domain = pddl_parser.getDomain();
 		opIndex = 0;
+		puckPosition = new PuckPosition();
 	}
-	
+
 	/**
 	 * Generate the problem file depending on the status of the field (puck position)
 	 */
-	void GenerateProblem() {
-		// Parse the "base problem" file to build upon
-		File base_problem_file = new File("pddl/puckretriever/problem_base.pddl");
+	private void GenerateProblem() {
+		puckPosition.updatePos();
+		String problem_str = "(define (problem puck-retrieving-problem)\n";
+		problem_str = problem_str.concat("(:domain puck-retriever)\n");
+		problem_str = problem_str.concat("(:requirements :strips :typing)\n");
+		problem_str = problem_str.concat(object_string);
+		for (String p : puckPosition.getPucks().keySet()) {
+			problem_str = problem_str.concat("p" + p + " - puck\n");
+		}
+		problem_str = problem_str.concat(")\n");
+		problem_str = problem_str.concat("(:init \n");
+		problem_str = problem_str.concat("(gripper-empty)\n(goal-node goal)\n" + "(at start)\n");
+		problem_str = problem_str.concat(link_string);
+		for (String p : puckPosition.getPucks().keySet()) {
+			problem_str = problem_str.concat("(puck-at " + "p" + p + " " + p + ")\n"); 
+		}
+		problem_str = problem_str.concat(")\n");
+		problem_str = problem_str.concat("(:goal \n(and \n");
+		for (String p : puckPosition.getPucks().keySet()) {
+			problem_str = problem_str.concat("(puck-at " + "p" + p + " goal)\n"); 
+		}
+		problem_str = problem_str.concat(")))");
+		System.out.println(problem_str);
+
+		File tmp = new File("pddl/puckretriever/problem.pddl");
+		PrintWriter pw;
 		try {
-			pddl_parser.parseProblem(base_problem_file);
-		} catch (FileNotFoundException e) {
+			pw = new PrintWriter(tmp);
+			pw.print(problem_str);
+			pw.close();
+			pddl_parser.parseProblem(tmp);
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		problem = pddl_parser.getProblem();
-		puckPosition.updatePos();
-		//Removing initial facts depending on the available pucks
-		for (String p : puckPosition.getPucks().keySet()) {
-			//if (puckPosition.getPucks().containsKey()Integer.toString(i)
-		}
 	}
-	
+
 	/**
 	 * Generate the PDDL encoded problem and plan
 	 */
@@ -79,7 +111,7 @@ public class PlanGenerator {
 			errorManager.printAll();
 			System.exit(0);
 		}
-		
+
 		final CodedProblem pb = factory.encode();
 		if (pb == null) {
 			return;
@@ -91,14 +123,15 @@ public class PlanGenerator {
 
 		final HSP planner = new HSP(2500, HSP.DEFAULT_HEURISTIC, HSP.DEFAULT_WEIGHT, HSP.DEFAULT_STATISTICS, HSP.DEFAULT_TRACE_LEVEL);
 		Plan plan = planner.search(pb);
-		
+
 		currentPb = pb;
 		currentPlan = plan;
 		opIndex = 0;
 	}
 	/**
-	 * Generate the next operation
-	 **/
+	 * Get the next action to do
+	 * @return ret Action to do (string)
+	 */
 	public String getNextOperation() {
 		if (opIndex >= currentPlan.actions().size())
 			return null;
@@ -106,12 +139,13 @@ public class PlanGenerator {
 		opIndex++;
 		return ret;
 	}
-
-	public static void main(String args[]) {
-		PlanGenerator p = new PlanGenerator();
-		p.GenerateProblem();
-		p.GeneratePlan();
-		for (int i = 0; i < 100; i++) System.out.println(p.getNextOperation());
+	
+	/**
+	 * Update the problem
+	 */
+	public void newPlan() {
+		GenerateProblem();
+		GeneratePlan();
 	}
 }
 
