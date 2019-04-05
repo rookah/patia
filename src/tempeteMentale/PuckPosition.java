@@ -61,4 +61,7 @@ public class PuckPosition {
 	public HashMap<String, Point> getPucks() {
 		return this.pucks;
 	}
+	public Point getGoalNode() {
+		return new Point(97,84);
+	}
 }
