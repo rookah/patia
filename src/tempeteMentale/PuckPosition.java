@@ -62,6 +62,6 @@ public class PuckPosition {
 		return this.pucks;
 	}
 	public Point getGoalNode() {
-		return new Point(97,84);
+		return new Point(100,10);
 	}
 }
