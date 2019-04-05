@@ -62,6 +62,10 @@ public class Sailor {
 		goal = null;
 	}
 	
+	/**
+	 * Move to a given waypoint
+	 * @param wp destination waypoint
+	 */
 	public void moveTo(Waypoint wp){
 		navigator.goTo(wp);
 		SensorMode toucher = catcher.getBumperSensor().getTouchMode();
@@ -106,6 +110,10 @@ public class Sailor {
 		//MoveTo new puck
 	}
 	
+	/**
+	 * Try to find a puck in the surroundings
+	 * @return true if the puck was found, else false
+	 */
 	public boolean recherchePalets() {
 		SensorMode toucher = catcher.getBumperSensor().getTouchMode();
 		float[] sample = new float[toucher.sampleSize()];
@@ -142,6 +150,9 @@ public class Sailor {
 		return paletFound;
 	}
 	
+	/**
+	 * Rotates the robot to the side depending on its position on the map
+	 */
 	public void decalage() {
 		int anglerot = 0;
 		if(posProv.getPose().getX() >= 90) {
@@ -154,6 +165,10 @@ public class Sailor {
 		pilot.rotate(-anglerot);
 	}
 	
+	/**
+	 * Check if there's something in front of the robot
+	 * @return true if something is in front, else false
+	 */
 	public boolean obstacleInFront(){
 		//TextLCD lcddisplay = ev3Brick.getTextLCD();
 		sonicDistance = sonicSensor.getDistanceMode();
@@ -164,6 +179,10 @@ public class Sailor {
 		
 	}
 	
+	/**
+	 * Follow a given color line
+	 * @param color 
+	 */
 	public void followColor(int color) {
 		TextLCD lcddisplay = ev3Brick.getTextLCD();
 		colorSense.setFloodlight(false);
@@ -203,14 +222,26 @@ public class Sailor {
 		}
 	}
 	
+	/**
+	 * Return the status of the catcher
+	 * @return catcther
+	 */
 	public Catcher getCatcher(){
 		return catcher;
 	}
 	
+	/**
+	 * Add a waypoint to the navigator
+	 * @param wp waypoint to add
+	 */
 	public void addWaypoint(Waypoint wp) {
 		navigator.addWaypoint(wp);
 	}
 	
+	/**
+	 * Set a waypoint as a goal
+	 * @param wp waypoint to add
+	 */
 	public void setGoal(Waypoint wp) {
 		this.goal = wp;
 	}

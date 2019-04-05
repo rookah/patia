@@ -9,8 +9,14 @@ public class PuckPosition {
 	public PuckPosition() {
 	}
 
+	/**
+	 * Pucks on the map
+	 */
 	private HashMap<String, Point> pucks;
 
+	/**
+	 * Static coordinates for associting pucks/nodes with the right label
+	 */
 	static final HashMap<String, Point> listCordonnees = 
 			new HashMap<String, Point>()
 	{
