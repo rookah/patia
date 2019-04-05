@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.rmi.RemoteException;
-import java.util.HashMap;
 
 import fr.uga.pddl4j.encoding.CodedProblem;
 import fr.uga.pddl4j.parser.Domain;
@@ -22,15 +21,25 @@ public class PlanGenerator implements PlanGeneratorInterface {
 	private Problem problem;
 	private CodedProblem currentPb;
 	private Plan currentPlan;
+	
+	/**
+	 * Position getter and updater of pucks over the board
+	 */
 	private PuckPosition puckPosition;
 
+	/**
+	 * Index for itterating through the operations
+	 */
 	private int opIndex;
 
 	/**
-	 * Strings for problem generation
+	 * String for problem generation
 	 */
 	private final String object_string = "(:objects\n start - node\n goal - node\n a1 - node\n a2 - node\n" +
 			" a3 - node \n b1 - node \n b2 - node \n b3 - node \n c1 - node \n c2 - node \n c3 - node \n";
+	/**
+	 * String for problem generation
+	 */
 	private final String link_string = "(link start a1)\n  (link start a2)\n (link start a3)\n" +
 			"(link a1 b1)\n (link b1 a1)\n (link a2 b2)\n (link b2 a2)\n (link a3 b3)\n (link b3 a3)\n" +
 			" (link b1 c1)\n (link c1 b1)\n (link b2 c2)\n (link c2 b2)\n (link b3 c3)\n" +
@@ -131,9 +140,18 @@ public class PlanGenerator implements PlanGeneratorInterface {
 	}
 	
 	/**
-	 * Update the problem
+	 * Get a new plan. Robot is at "start-node"
 	 */
 	public void newPlan() throws RemoteException{
+		GenerateProblem();
+		GeneratePlan();
+	}
+	
+	/**
+	 * Update the problem with a given starting position
+	 * @param starting_node current position of the robot
+	 */
+	public void newPlan(String starting_node) {
 		GenerateProblem();
 		GeneratePlan();
 	}
@@ -152,13 +170,25 @@ public class PlanGenerator implements PlanGeneratorInterface {
 	
 	/**
 	 * Get position on the board of a puck from its label
+	 * @return Point on the board of the puck
 	 */
 	public Point getPositionsFromPuck(String puckLabel) throws RemoteException{
 		return this.puckPosition.getPucks().get(puckLabel);
 	}
 	
+	/**
+	 * Get position on the board of a node from its label
+	 * @return Point on the board of the node
+	 */
+	public Point getPositionsFromNode(String nodeLabel) throws RemoteException  {
+		return this.puckPosition.getNode(nodeLabel);
+	}
+
+	/**
+	 * Get the point of the goal node
+	 * @return Point of the goal node
+	 */
 	public Point getGoalNode() throws RemoteException {
-		return this.puckPosition.getGoalNode();
+		return this.puckPosition.getNode("goal");
 	}
 }
-

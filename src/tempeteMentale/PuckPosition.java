@@ -25,6 +25,8 @@ public class PuckPosition {
 			put ("c1", new Point(46, 84));
 			put ("c2", new Point(97, 84));
 			put ("c3", new Point(152, 84));
+			put ("start", new Point(97, 84));
+			put ("goal", new Point(152, 84));
 		}
 	};
 
@@ -54,14 +56,21 @@ public class PuckPosition {
 		}
 		pucks = listCordonneesExiste;
 	}
-/**
- * Get pucks 
- * @return
- */
+	
+	/**
+	 * Get the list of pucks present on the board
+	 * @return HashMap of pucks on the board
+	 */
 	public HashMap<String, Point> getPucks() {
 		return this.pucks;
 	}
-	public Point getGoalNode() {
-		return new Point(100,10);
+	
+	/**
+	 * Get the position on the board of a given node
+	 * @param node_label node to get the position of
+	 * @return Point on the board
+	 */
+	public Point getNode(String node_label) {
+		return listCordonnees.get(node_label);
 	}
 }
