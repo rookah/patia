@@ -1,3 +1,8 @@
+/**
+ * Classe de gestion de la manipulation de palets
+ * @author bozzo1337 Xaalan
+ */
+
 package tempeteMentale;
 
 import lejos.hardware.ev3.LocalEV3;
@@ -21,20 +26,28 @@ public class Catcher {
 		bumperSensor = new EV3TouchSensor(gripSensorPort);
 	}
 	
+	/**
+	 * Ferme les pinces du robot pour attrapper un palet
+	 */
 	public void catchPuck(){		
 		gripMotor.setSpeed(600);
 		gripMotor.backward();
 		Delay.msDelay(1600);
 		gripMotor.stop();
 	}
-	
+	/**
+	 * Ouvre les pinces du robots pour relâcher un palet
+	 */
 	public void releasePuck(){
 		gripMotor.setSpeed(600);
 		gripMotor.forward();
 		Delay.msDelay(1600);
 		gripMotor.stop();
 	}
-	
+	/**
+	 * Récupère le capteur de contact du robot
+	 * @return retourne le capteur de contact
+	 */
 	public EV3TouchSensor getBumperSensor(){
 		return bumperSensor;
 	}

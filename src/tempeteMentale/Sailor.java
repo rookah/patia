@@ -1,3 +1,10 @@
+/**
+ * Class to run the robot's actions and deplacements
+ * depending on its goal, position and environment 
+ * @author bozzo1337 Xaalan rookah
+ */
+
+
 package tempeteMentale;
 
 import lejos.hardware.BrickFinder;
@@ -63,7 +70,7 @@ public class Sailor {
 	}
 	
 	/**
-	 * Move to a given waypoint
+	 * Move to a given waypoint and perform an action depending on the environment
 	 * @param wp destination waypoint
 	 */
 	public void moveTo(Waypoint wp){
@@ -180,7 +187,7 @@ public class Sailor {
 	}
 	
 	/**
-	 * Follow a given color line
+	 * Follow a given color line and search it if the line is lost
 	 * @param color 
 	 */
 	public void followColor(int color) {
