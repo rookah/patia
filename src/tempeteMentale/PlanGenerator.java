@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 
 import fr.uga.pddl4j.encoding.CodedProblem;
 import fr.uga.pddl4j.parser.Domain;
@@ -127,6 +128,15 @@ public class PlanGenerator {
 		currentPlan = plan;
 		opIndex = 0;
 	}
+	
+	/**
+	 * Update the problem
+	 */
+	public void newPlan() {
+		GenerateProblem();
+		GeneratePlan();
+	}
+	
 	/**
 	 * Get the next action to do
 	 * @return ret Action to do (string)
@@ -140,17 +150,10 @@ public class PlanGenerator {
 	}
 	
 	/**
-	 * Update the problem
+	 * Get position on the board of a puck from its label
 	 */
-	public void newPlan() {
-		GenerateProblem();
-		GeneratePlan();
-	}
-	
-	public static void main(String args[]) {
-		PlanGenerator p = new PlanGenerator();
-		p.newPlan();
-
+	public Point getPositionsFromPuck(String puckLabel) {
+		return this.puckPosition.getPucks().get(puckLabel);
 	}
 }
 
