@@ -155,5 +155,9 @@ public class PlanGenerator {
 	public Point getPositionsFromPuck(String puckLabel) {
 		return this.puckPosition.getPucks().get(puckLabel);
 	}
+	
+	public Point getGoalNode() {
+		return this.puckPosition.getGoalNode();
+	}
 }
 

@@ -39,6 +39,7 @@ public class Sailor {
 	private SampleProvider sonicDistance;
 	private Catcher catcher;
 	public boolean pinceFermee;
+	private Waypoint goal;
 
 	
 	public Sailor(){
@@ -58,6 +59,7 @@ public class Sailor {
 		posProv.setPose(new Pose(91,290,270)); //Position Robot ligne noire, roues derriere ligne blanche
 		catcher = new Catcher();
 		pinceFermee = false;
+		goal = null;
 	}
 	
 	public void moveTo(Waypoint wp){
@@ -84,7 +86,7 @@ public class Sailor {
 				//Request new plan
 				decalage();
 				navigator.clearPath();
-				navigator.goTo(new Waypoint(posProv.getPose().getX(),150));
+				navigator.goTo(goal);
 			}
 		}
 		if (pinceFermee) {
@@ -93,16 +95,15 @@ public class Sailor {
 			Sound.playTone(880, 100, 60);
 			pilot.travel(-20);
 			pinceFermee = false;
-			//Request new plan
 		} else {
-			
 			if (recherchePalets()) {
 				catcher.catchPuck();
 				pinceFermee = true;
 				decalage();
-				moveTo(new Waypoint(posProv.getPose().getX(), 150));
+				moveTo(goal);
 			}
 		}
+		//MoveTo new puck
 	}
 	
 	public boolean recherchePalets() {
@@ -206,4 +207,11 @@ public class Sailor {
 		return catcher;
 	}
 	
+	public void addWaypoint(Waypoint wp) {
+		navigator.addWaypoint(wp);
+	}
+	
+	public void setGoal(Waypoint wp) {
+		this.goal = wp;
+	}
 }
