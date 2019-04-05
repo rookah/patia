@@ -1,57 +1,96 @@
 package tempeteMentale;
 
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+
+import lejos.hardware.BrickFinder;
+import lejos.hardware.Keys;
+import lejos.hardware.ev3.EV3;
 import lejos.robotics.navigation.Waypoint;
 
 public class PlanInterpreter {
 	
-	private PlanGenerator p;
+	private PlanGeneratorInterface p;
 	
 	public PlanInterpreter() {
-		p = new PlanGenerator();
+		p = null;
 	}
 	
 	public void interpreter(Sailor s) {
-		p.newPlan();
+		try {
+			p.newPlan();
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
 		String action ;
 		String actual; 
 		String  destination; 
 		String[] parse = null; //tableau de chaînes
 		
-		Point goal = p.getGoalNode();
+		Point goal;
+		goal = null;
+		try {
+			goal = p.getGoalNode();
+		} catch (RemoteException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		boolean firstMove = true;
 		
 		s.setGoal(new Waypoint(goal.getCoord1(), goal.getCoord2()));
 		
-		while (p.getNextOperation() != null) {
-			String result =  p.getNextOperation();
-		    parse = result.split("\\s+");
-		    action = parse[0];
-		    actual = parse[1];
-		    destination = parse[2];
-		    switch(action) {
-			    case "pick-up":
-			    	firstMove = true;
-			    	break;
-			    case "move":
-			    	if (firstMove) {
-			    		s.moveTo(new Waypoint(p.getPositionsFromPuck(destination).getCoord1(),p.getPositionsFromPuck(destination).getCoord2()));
-			    		firstMove = false;
-			    	} else {
-			    		s.addWaypoint(new Waypoint(p.getPositionsFromPuck(destination).getCoord1(),p.getPositionsFromPuck(destination).getCoord2()));
-			    	}
-			    	break;
-			    case "drop-down": 
-			    	firstMove = true;
-			    	break;
-			    default: 
-			    	break;   
-		    }
+		try {
+			while (p.getNextOperation() != null) {
+				String result =  p.getNextOperation();
+			    parse = result.split("\\s+");
+			    action = parse[0];
+			    actual = parse[1];
+			    destination = parse[2];
+			    switch(action) {
+				    case "pick-up":
+				    	firstMove = true;
+				    	break;
+				    case "move":
+				    	if (firstMove) {
+				    		s.moveTo(new Waypoint(p.getPositionsFromPuck(destination).getCoord1(),p.getPositionsFromPuck(destination).getCoord2()));
+				    		firstMove = false;
+				    	} else {
+				    		s.addWaypoint(new Waypoint(p.getPositionsFromPuck(destination).getCoord1(),p.getPositionsFromPuck(destination).getCoord2()));
+				    	}
+				    	break;
+				    case "drop-down": 
+				    	firstMove = true;
+				    	break;
+				    default: 
+				    	break;   
+			    }
+			}
+		} catch (RemoteException e) {
+			e.printStackTrace();
 		}
 	}
 	
+	public void setPlanGenerator(PlanGeneratorInterface planGeneratorInterface) {
+		this.p = planGeneratorInterface;
+	}
+	
 	public static void main(String args[]) {
+		EV3 ev3brick = (EV3) BrickFinder.getLocal();
+
+		Keys buttons = ev3brick.getKeys();
+
 		PlanInterpreter planInterpreter = new PlanInterpreter();
 		Sailor s = new Sailor();
+		String host = "192.168.0.33";
+		try {
+			Registry registry = LocateRegistry.getRegistry(host);
+			planInterpreter.setPlanGenerator((PlanGeneratorInterface) registry.lookup("PlanService"));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		buttons.waitForAnyPress();
 		planInterpreter.interpreter(s);
 	}
 }

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.rmi.RemoteException;
 import java.util.HashMap;
 
 import fr.uga.pddl4j.encoding.CodedProblem;
@@ -16,7 +17,7 @@ import fr.uga.pddl4j.planners.statespace.hsp.HSP;
 import fr.uga.pddl4j.util.BitOp;
 import fr.uga.pddl4j.util.Plan;
 
-public class PlanGenerator {
+public class PlanGenerator implements PlanGeneratorInterface {
 	private Domain domain;
 	private Problem problem;
 	private CodedProblem currentPb;
@@ -132,7 +133,7 @@ public class PlanGenerator {
 	/**
 	 * Update the problem
 	 */
-	public void newPlan() {
+	public void newPlan() throws RemoteException{
 		GenerateProblem();
 		GeneratePlan();
 	}
@@ -141,7 +142,7 @@ public class PlanGenerator {
 	 * Get the next action to do
 	 * @return ret Action to do (string)
 	 */
-	public String getNextOperation() {
+	public String getNextOperation() throws RemoteException {
 		if (opIndex >= currentPlan.actions().size())
 			return null;
 		String ret = currentPb.toShortString((BitOp) currentPlan.actions().get(opIndex));
@@ -152,11 +153,11 @@ public class PlanGenerator {
 	/**
 	 * Get position on the board of a puck from its label
 	 */
-	public Point getPositionsFromPuck(String puckLabel) {
+	public Point getPositionsFromPuck(String puckLabel) throws RemoteException{
 		return this.puckPosition.getPucks().get(puckLabel);
 	}
 	
-	public Point getGoalNode() {
+	public Point getGoalNode() throws RemoteException {
 		return this.puckPosition.getGoalNode();
 	}
 }
