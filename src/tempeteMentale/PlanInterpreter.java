@@ -53,7 +53,7 @@ public class PlanInterpreter {
 				    	break;
 				    case "move":
 				    	if (firstMove) {
-				    		s.moveTo(new Waypoint(p.getPositionsFromPuck(destination).getCoord1(),p.getPositionsFromPuck(destination).getCoord2()));
+				    		s.moveTo(new Waypoint(p.getPositionsFromNode(destination).getCoord1(),p.getPositionsFromNode(destination).getCoord2()));
 				    		firstMove = false;
 				    	} else {
 				    		s.addWaypoint(new Waypoint(p.getPositionsFromPuck(destination).getCoord1(),p.getPositionsFromPuck(destination).getCoord2()));

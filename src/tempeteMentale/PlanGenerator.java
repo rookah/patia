@@ -176,6 +176,7 @@ public class PlanGenerator implements PlanGeneratorInterface {
 	 * @return Point on the board of the puck
 	 */
 	public Point getPositionsFromPuck(String puckLabel) throws RemoteException{
+		System.out.println(this.puckPosition.getPucks().toString());
 		return this.puckPosition.getPucks().get(puckLabel);
 	}
 	

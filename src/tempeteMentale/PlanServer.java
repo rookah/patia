@@ -13,7 +13,7 @@ public class PlanServer {
 		System.setProperty("java.rmi.server.hostname", host);
 		try {
 			PlanGeneratorInterface p_stub = (PlanGeneratorInterface) UnicastRemoteObject.exportObject(p, 0);
-			Registry registry = LocateRegistry.createRegistry(8004);
+			Registry registry = LocateRegistry.createRegistry(8006);
 			registry.bind("PlanService", p_stub);
 			System.out.println("Server ready");
 		} catch (Exception e) {

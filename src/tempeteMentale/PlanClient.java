@@ -23,7 +23,7 @@ public class PlanClient {
 		System.setProperty("java.rmi.server.hostname", host);
 		buttons.waitForAnyPress();
 		try {
-			PlanGeneratorInterface pgi = (PlanGeneratorInterface) Naming.lookup("rmi://192.168.1.33:8004/PlanService");
+			PlanGeneratorInterface pgi = (PlanGeneratorInterface) Naming.lookup("rmi://192.168.1.33:8006/PlanService");
 			planInterpreter.setPlanGenerator(pgi);
 
 			buttons.waitForAnyPress();
@@ -36,5 +36,6 @@ public class PlanClient {
 		}
 		buttons.waitForAnyPress();
 		planInterpreter.interpreter(s);
+		buttons.waitForAnyPress();
 	}
 }

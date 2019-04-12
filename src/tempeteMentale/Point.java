@@ -3,6 +3,10 @@ package tempeteMentale;
 import java.io.Serializable;
 
 public class Point implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4219216537718562691L;
 	float coord1; 
 	float coord2;
 	

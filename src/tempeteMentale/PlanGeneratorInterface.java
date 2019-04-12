@@ -8,4 +8,5 @@ public interface PlanGeneratorInterface extends Remote{
 	public void newPlan() throws RemoteException;
 	public Point getGoalNode() throws RemoteException;
 	public Point getPositionsFromPuck(String destination) throws RemoteException;
+	public Point getPositionsFromNode(String nodeLabel) throws RemoteException;
 }
