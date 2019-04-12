@@ -145,6 +145,7 @@ public class PlanGenerator implements PlanGeneratorInterface {
 	public void newPlan() throws RemoteException{
 		GenerateProblem();
 		GeneratePlan();
+		System.out.println("New Plan generated");
 	}
 	
 	/**

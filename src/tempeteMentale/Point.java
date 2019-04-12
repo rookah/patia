@@ -1,6 +1,8 @@
 package tempeteMentale;
 
-public class Point {
+import java.io.Serializable;
+
+public class Point implements Serializable{
 	float coord1; 
 	float coord2;
 	

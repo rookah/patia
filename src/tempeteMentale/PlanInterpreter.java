@@ -74,23 +74,4 @@ public class PlanInterpreter {
 	public void setPlanGenerator(PlanGeneratorInterface planGeneratorInterface) {
 		this.p = planGeneratorInterface;
 	}
-	
-	public static void main(String args[]) {
-		EV3 ev3brick = (EV3) BrickFinder.getLocal();
-
-		Keys buttons = ev3brick.getKeys();
-
-		PlanInterpreter planInterpreter = new PlanInterpreter();
-		Sailor s = new Sailor();
-		String host = "192.168.0.33";
-		try {
-			Registry registry = LocateRegistry.getRegistry(host);
-			planInterpreter.setPlanGenerator((PlanGeneratorInterface) registry.lookup("PlanService"));
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		buttons.waitForAnyPress();
-		planInterpreter.interpreter(s);
-	}
 }
