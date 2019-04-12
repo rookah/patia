@@ -67,8 +67,9 @@ public class PlanGenerator implements PlanGeneratorInterface {
 
 	/**
 	 * Generate the problem file depending on the status of the field (puck position)
+	 * @param node-at Node the robot is at when generating the plan
 	 */
-	private void GenerateProblem() {
+	private void GenerateProblem(String node_at) {
 		puckPosition.updatePos();
 		String problem_str = "(define (problem puck-retrieving-problem)\n";
 		problem_str = problem_str.concat("(:domain puck-retriever)\n");
@@ -79,7 +80,8 @@ public class PlanGenerator implements PlanGeneratorInterface {
 		}
 		problem_str = problem_str.concat(")\n");
 		problem_str = problem_str.concat("(:init \n");
-		problem_str = problem_str.concat("(gripper-empty)\n(goal-node goal)\n" + "(at start)\n");
+		problem_str = problem_str.concat("(gripper-empty)\n(goal-node goal)\n");
+		problem_str = problem_str.concat("(at " + node_at +")\n");
 		problem_str = problem_str.concat(link_string);
 		for (String p : puckPosition.getPucks().keySet()) {
 			problem_str = problem_str.concat("(puck-at " + "p" + p + " " + p + ")\n"); 
@@ -140,10 +142,10 @@ public class PlanGenerator implements PlanGeneratorInterface {
 	}
 	
 	/**
-	 * Get a new plan. Robot is at "start-node"
+	 * Get a new plan. Robot is at "start"
 	 */
 	public void newPlan() throws RemoteException{
-		GenerateProblem();
+		GenerateProblem("start");
 		GeneratePlan();
 		System.out.println("New Plan generated");
 	}
@@ -153,7 +155,7 @@ public class PlanGenerator implements PlanGeneratorInterface {
 	 * @param starting_node current position of the robot
 	 */
 	public void newPlan(String starting_node) {
-		GenerateProblem();
+		GenerateProblem("start-node");
 		GeneratePlan();
 	}
 	
