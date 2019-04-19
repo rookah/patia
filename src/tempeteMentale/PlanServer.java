@@ -9,7 +9,7 @@ public class PlanServer {
 
 	public static void main(String[] args) {
 		PlanGenerator p = new PlanGenerator();
-		String host = "192.168.1.33";
+		String host = "192.168.1.40";
 		System.setProperty("java.rmi.server.hostname", host);
 		try {
 			PlanGeneratorInterface p_stub = (PlanGeneratorInterface) UnicastRemoteObject.exportObject(p, 0);

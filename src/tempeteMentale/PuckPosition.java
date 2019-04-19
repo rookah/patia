@@ -22,17 +22,17 @@ public class PuckPosition {
 	{
 		private static final long serialVersionUID = 1L;
 		{
-			put ("a1", new Point(42, 218));
-			put ("a2", new Point(97, 218));
-			put ("a3", new Point(152, 218));
-			put ("b1", new Point(46, 153));
+			put ("a1", new Point(46, 217));
+			put ("a2", new Point(101, 217));
+			put ("a3", new Point(159, 217));
+			put ("b1", new Point(48, 153));
 			put ("b2", new Point(97, 153));
 			put ("b3", new Point(152, 153));
 			put ("c1", new Point(46, 84));
 			put ("c2", new Point(97, 84));
 			put ("c3", new Point(152, 84));
-			put ("start", new Point(97, 84));
-			put ("goal", new Point(152, 84));
+			put ("start", new Point(103,296));
+			put ("goal", new Point(103, 22));
 		}
 	};
 

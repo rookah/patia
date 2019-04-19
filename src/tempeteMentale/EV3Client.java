@@ -5,15 +5,19 @@ import java.net.DatagramSocket;
 
 public class EV3Client {
 	
+	private static DatagramSocket dsocket = null;
+	
   public static int[] getPalets() 
   {
     try 
     {
       int port = 8888;
-
+      
+      
       // Create a socket to listen on the port.
-      DatagramSocket dsocket = new DatagramSocket(port);
-
+      if (dsocket == null) {
+    	  dsocket = new DatagramSocket(port);
+      }
       // Create a buffer to read datagrams into. If a
       // packet is larger than this buffer, the
       // excess will simply be discarded!

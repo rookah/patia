@@ -12,14 +12,17 @@ import lejos.robotics.navigation.Waypoint;
 public class PlanInterpreter {
 	
 	private PlanGeneratorInterface p;
+	private boolean requestNewPlan;
 	
 	public PlanInterpreter() {
 		p = null;
+		requestNewPlan = false;
 	}
 	
 	public void interpreter(Sailor s) {
 		try {
 			p.newPlan();
+			requestNewPlan = false;
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -36,42 +39,49 @@ public class PlanInterpreter {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		boolean firstMove = true;
 		
 		s.setGoal(new Waypoint(goal.getCoord1(), goal.getCoord2()));
 		
 		try {
-			while (p.getNextOperation() != null) {
-				String result =  p.getNextOperation();
+			String result = p.getNextOperation();
+			while (result != null && !requestNewPlan) {
+				String nextOp =  p.getNextOperation();
 			    parse = result.split("\\s+");
 			    action = parse[0];
 			    actual = parse[1];
 			    destination = parse[2];
+			    String[] parseNext = nextOp.split("\\s+");
+			    String actionNext = parseNext[0];
+			    String actualNext = parseNext[1];
+			    String destinationNext = parseNext[2];
 			    switch(action) {
 				    case "pick-up":
-				    	firstMove = true;
 				    	break;
 				    case "move":
-				    	if (firstMove) {
-				    		s.moveTo(new Waypoint(p.getPositionsFromNode(destination).getCoord1(),p.getPositionsFromNode(destination).getCoord2()));
-				    		firstMove = false;
+				    	if (actionNext.equals("pick-up")) {
+				    		s.moveTo(new Waypoint(p.getPositionsFromPuck(destination).getCoord1(),p.getPositionsFromPuck(destination).getCoord2()));
 				    	} else {
-				    		s.addWaypoint(new Waypoint(p.getPositionsFromPuck(destination).getCoord1(),p.getPositionsFromPuck(destination).getCoord2()));
+				    		s.getNavigator().goTo(new Waypoint(p.getPositionsFromNode(destination).getCoord1(),p.getPositionsFromNode(destination).getCoord2()));
 				    	}
 				    	break;
 				    case "drop-down": 
-				    	firstMove = true;
 				    	break;
 				    default: 
 				    	break;   
 			    }
+			    result = nextOp;
 			}
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
+		interpreter(s);
 	}
 	
 	public void setPlanGenerator(PlanGeneratorInterface planGeneratorInterface) {
 		this.p = planGeneratorInterface;
+	}
+	
+	public void requestNewPlan() {
+		requestNewPlan = true;
 	}
 }

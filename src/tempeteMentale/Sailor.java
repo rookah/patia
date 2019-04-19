@@ -47,26 +47,30 @@ public class Sailor {
 	private Catcher catcher;
 	public boolean pinceFermee;
 	private Waypoint goal;
+	private PlanInterpreter pi;
 
 	
-	public Sailor(){
+	public Sailor(PlanInterpreter pi){
 		ev3Brick = (EV3) BrickFinder.getLocal();
-		sonicSensorPort = ev3Brick.getPort("S4");
-		colorSensorPort = ev3Brick.getPort("S3");
+		sonicSensorPort = ev3Brick.getPort("S3");
+		colorSensorPort = ev3Brick.getPort("S2");
 		sonicSensor = new EV3UltrasonicSensor(sonicSensorPort);
 		colorSense = new EV3ColorSensor(colorSensorPort);
 		left_motor = new EV3LargeRegulatedMotor(MotorPort.A);
-		right_motor = new EV3LargeRegulatedMotor(MotorPort.D);
+		right_motor = new EV3LargeRegulatedMotor(MotorPort.C);
 		wheel_left = WheeledChassis.modelWheel(left_motor, 5.5).offset(-6.9);
 		wheel_right = WheeledChassis.modelWheel(right_motor, 5.5).offset(6.9);
 		chassis = new WheeledChassis(new Wheel[] { wheel_left, wheel_right }, WheeledChassis.TYPE_DIFFERENTIAL);
 		pilot = new MovePilot(chassis);
 		navigator = new Navigator(pilot);
 		posProv = navigator.getPoseProvider();
-		posProv.setPose(new Pose(91,290,270)); //Position Robot ligne noire, roues derriere ligne blanche
+		posProv.setPose(new Pose(103,296,270)); //Position Robot ligne noire, roues derriere ligne blanche
 		catcher = new Catcher();
 		pinceFermee = false;
 		goal = null;
+		this.pi = pi;
+		pilot.setLinearSpeed(pilot.getLinearSpeed()/2);
+		pilot.setAngularSpeed(pilot.getAngularSpeed()/3);
 	}
 	
 	/**
@@ -94,7 +98,6 @@ public class Sailor {
 				pilot.travel(2);
 				catcher.catchPuck();
 				pinceFermee = true;
-				//Request new plan
 				decalage();
 				navigator.clearPath();
 				navigator.goTo(goal);
@@ -112,9 +115,10 @@ public class Sailor {
 				pinceFermee = true;
 				decalage();
 				moveTo(goal);
+			} else {
+				pi.requestNewPlan();
 			}
 		}
-		//MoveTo new puck
 	}
 	
 	/**
@@ -134,7 +138,7 @@ public class Sailor {
 		
 		while (!paletFound && cycle < 4) {
 			pilot.setLinearSpeed(initialSpeed);
-			pilot.travel(-20);
+			pilot.travel(-30);
 			pilot.rotate(angle);
 			while (!paletFound && travelStep < 3) {
 				pilot.setLinearSpeed(8);
@@ -182,7 +186,7 @@ public class Sailor {
 		float[] sample = new float[sonicDistance.sampleSize()];
 		sonicDistance.fetchSample(sample, 0);
 		//lcddisplay.drawString("distance: " + sample[0], 0, 1);
-		return sample[0] < 0.2;
+		return sample[0] < 0.1;
 		
 	}
 	
@@ -251,5 +255,9 @@ public class Sailor {
 	 */
 	public void setGoal(Waypoint wp) {
 		this.goal = wp;
+	}
+	
+	public Navigator getNavigator() {
+		return this.navigator;
 	}
 }

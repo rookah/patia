@@ -14,15 +14,19 @@ public class TestEvitement {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		Sailor sailor = new Sailor();
+		PlanInterpreter pi = new PlanInterpreter();
+		Sailor sailor = new Sailor(pi);
 		EV3 ev3brick = (EV3) BrickFinder.getLocal();
 
 		Keys buttons = ev3brick.getKeys();
 		//buttons.waitForAnyPress();
 		//sailor.getCatcher().releasePuck();
-		buttons.waitForAnyPress();
-		sailor.moveTo(new Waypoint(90, 230));
-		buttons.waitForAnyPress();
+		while(true) {
+			buttons.waitForAnyPress();
+			sailor.getCatcher().releasePuck();
+		}
+		//sailor.moveTo(new Waypoint(90, 230));
+		//buttons.waitForAnyPress();
 	}
 
 }

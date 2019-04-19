@@ -22,7 +22,7 @@ public class Catcher {
 	public Catcher(){
 		gripMotorPort = MotorPort.B;
 		gripMotor = new EV3LargeRegulatedMotor(gripMotorPort);
-		gripSensorPort = LocalEV3.get().getPort("S2");
+		gripSensorPort = LocalEV3.get().getPort("S1");
 		bumperSensor = new EV3TouchSensor(gripSensorPort);
 	}
 	
@@ -36,7 +36,7 @@ public class Catcher {
 		gripMotor.stop();
 	}
 	/**
-	 * Ouvre les pinces du robots pour relâcher un palet
+	 * Ouvre les pinces du robots pour relï¿½cher un palet
 	 */
 	public void releasePuck(){
 		gripMotor.setSpeed(600);
@@ -45,7 +45,7 @@ public class Catcher {
 		gripMotor.stop();
 	}
 	/**
-	 * Récupère le capteur de contact du robot
+	 * Rï¿½cupï¿½re le capteur de contact du robot
 	 * @return retourne le capteur de contact
 	 */
 	public EV3TouchSensor getBumperSensor(){

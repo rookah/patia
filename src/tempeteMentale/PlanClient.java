@@ -18,12 +18,12 @@ public class PlanClient {
 		Keys buttons = ev3brick.getKeys();
 
 		PlanInterpreter planInterpreter = new PlanInterpreter();
-		Sailor s = new Sailor();
-		String host = "192.168.1.33";
+		Sailor s = new Sailor(planInterpreter);
+		String host = "192.168.1.40";
 		System.setProperty("java.rmi.server.hostname", host);
 		buttons.waitForAnyPress();
 		try {
-			PlanGeneratorInterface pgi = (PlanGeneratorInterface) Naming.lookup("rmi://192.168.1.33:8006/PlanService");
+			PlanGeneratorInterface pgi = (PlanGeneratorInterface) Naming.lookup("rmi://192.168.1.40:8006/PlanService");
 			planInterpreter.setPlanGenerator(pgi);
 
 			buttons.waitForAnyPress();
@@ -35,7 +35,7 @@ public class PlanClient {
 			e.printStackTrace();
 		}
 		buttons.waitForAnyPress();
-		planInterpreter.interpreter(s);
+		planInterpreter.interpreter(s); 
 		buttons.waitForAnyPress();
 	}
 }
