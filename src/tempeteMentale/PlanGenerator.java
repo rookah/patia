@@ -154,9 +154,10 @@ public class PlanGenerator implements PlanGeneratorInterface {
 	 * Update the problem with a given starting position
 	 * @param starting_node current position of the robot
 	 */
-	public void newPlan(String starting_node) {
-		GenerateProblem("start-node");
+	public void newPlan(String starting_node) throws RemoteException {
+		GenerateProblem(starting_node);
 		GeneratePlan();
+		System.out.println("New Plan generated");
 	}
 	
 	/**
@@ -176,7 +177,7 @@ public class PlanGenerator implements PlanGeneratorInterface {
 	 * @return Point on the board of the puck
 	 */
 	public Point getPositionsFromPuck(String puckLabel) throws RemoteException{
-		System.out.println(this.puckPosition.getPucks().toString());
+		System.out.println("Catching " + puckLabel);
 		return this.puckPosition.getPucks().get(puckLabel);
 	}
 	

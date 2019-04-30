@@ -52,12 +52,12 @@ public class Sailor {
 	
 	public Sailor(PlanInterpreter pi){
 		ev3Brick = (EV3) BrickFinder.getLocal();
-		sonicSensorPort = ev3Brick.getPort("S3");
-		colorSensorPort = ev3Brick.getPort("S2");
+		sonicSensorPort = ev3Brick.getPort("S1");
+		colorSensorPort = ev3Brick.getPort("S3");
 		sonicSensor = new EV3UltrasonicSensor(sonicSensorPort);
 		colorSense = new EV3ColorSensor(colorSensorPort);
-		left_motor = new EV3LargeRegulatedMotor(MotorPort.A);
-		right_motor = new EV3LargeRegulatedMotor(MotorPort.C);
+		left_motor = new EV3LargeRegulatedMotor(MotorPort.B);
+		right_motor = new EV3LargeRegulatedMotor(MotorPort.A);
 		wheel_left = WheeledChassis.modelWheel(left_motor, 5.5).offset(-6.9);
 		wheel_right = WheeledChassis.modelWheel(right_motor, 5.5).offset(6.9);
 		chassis = new WheeledChassis(new Wheel[] { wheel_left, wheel_right }, WheeledChassis.TYPE_DIFFERENTIAL);
@@ -77,7 +77,7 @@ public class Sailor {
 	 * Move to a given waypoint and perform an action depending on the environment
 	 * @param wp destination waypoint
 	 */
-	public void moveTo(Waypoint wp){
+	public void moveTo(Waypoint wp, boolean release){
 		navigator.goTo(wp);
 		SensorMode toucher = catcher.getBumperSensor().getTouchMode();
 		float[] sample = new float[toucher.sampleSize()];
@@ -98,23 +98,23 @@ public class Sailor {
 				pilot.travel(2);
 				catcher.catchPuck();
 				pinceFermee = true;
-				decalage();
+				/*decalage();
 				navigator.clearPath();
-				navigator.goTo(goal);
+				navigator.goTo(goal);*/
 			}
 		}
-		if (pinceFermee) {
+		if (pinceFermee && release) {
 			catcher.releasePuck();
 			Sound.playTone(440, 100, 50);
 			Sound.playTone(880, 100, 60);
 			pilot.travel(-20);
 			pinceFermee = false;
-		} else {
-			if (recherchePalets()) {
+		} else if (!pinceFermee){
+			if (true) { //recherchePalets()) {
 				catcher.catchPuck();
 				pinceFermee = true;
-				decalage();
-				moveTo(goal);
+				/*decalage();
+				moveTo(goal);*/
 			} else {
 				pi.requestNewPlan();
 			}

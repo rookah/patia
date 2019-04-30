@@ -20,9 +20,9 @@ public class Catcher {
 	private final EV3TouchSensor bumperSensor;
 	
 	public Catcher(){
-		gripMotorPort = MotorPort.B;
+		gripMotorPort = MotorPort.D;
 		gripMotor = new EV3LargeRegulatedMotor(gripMotorPort);
-		gripSensorPort = LocalEV3.get().getPort("S1");
+		gripSensorPort = LocalEV3.get().getPort("S4");
 		bumperSensor = new EV3TouchSensor(gripSensorPort);
 	}
 	

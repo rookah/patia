@@ -31,8 +31,8 @@ public class PuckPosition {
 			put ("c1", new Point(46, 84));
 			put ("c2", new Point(97, 84));
 			put ("c3", new Point(152, 84));
-			put ("start", new Point(103,296));
-			put ("goal", new Point(103, 22));
+			put ("start", new Point(97,294));
+			put ("goal", new Point(95, 32));
 		}
 	};
 

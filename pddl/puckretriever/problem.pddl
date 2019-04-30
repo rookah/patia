@@ -16,7 +16,6 @@
 pc3 - puck
 pa1 - puck
 pa3 - puck
-pgoal - puck
 )
 (:init 
 (gripper-empty)
@@ -46,12 +45,10 @@ pgoal - puck
 (puck-at pc3 c3)
 (puck-at pa1 a1)
 (puck-at pa3 a3)
-(puck-at pgoal goal)
 )
 (:goal 
 (and 
 (puck-at pc3 goal)
 (puck-at pa1 goal)
 (puck-at pa3 goal)
-(puck-at pgoal goal)
 )))

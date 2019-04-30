@@ -23,7 +23,7 @@ public class TestEvitement {
 		//sailor.getCatcher().releasePuck();
 		while(true) {
 			buttons.waitForAnyPress();
-			sailor.getCatcher().releasePuck();
+			sailor.getCatcher().catchPuck();
 		}
 		//sailor.moveTo(new Waypoint(90, 230));
 		//buttons.waitForAnyPress();
