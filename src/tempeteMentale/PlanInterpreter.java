@@ -31,30 +31,17 @@ public class PlanInterpreter {
 		String  destination; 
 		String[] parse = null; //tableau de chaînes
 
-		Point goal;
-		goal = null;
-		try {
-			goal = p.getGoalNode();
-		} catch (RemoteException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
-		s.setGoal(new Waypoint(goal.getCoord1(), goal.getCoord2()));
-
 		try {
 			String result = p.getNextOperation();
+			String nextOp;
 			while (result != null) {
-				while (result != null && !requestNewPlan) {
-					String nextOp =  p.getNextOperation();
+				while (result != null && !requestNewPlan && (nextOp =  p.getNextOperation()) != null) {
 					parse = result.split("\\s+");
 					action = parse[0];
 					actual = parse[1];
 					destination = parse[2];
 					String[] parseNext = nextOp.split("\\s+");
 					String actionNext = parseNext[0];
-					String actualNext = parseNext[1];
-					String destinationNext = parseNext[2];
 					switch(action) {
 					case "pick-up":
 						break;
@@ -75,9 +62,11 @@ public class PlanInterpreter {
 					}
 					result = nextOp;
 				}
-				p.newPlan(actual);
-				requestNewPlan = false;
-				result = p.getNextOperation();
+				if (requestNewPlan) {
+					p.newPlan(actual);
+					requestNewPlan = false;
+					result = p.getNextOperation();
+				}
 			}
 		} catch (RemoteException e) {
 			e.printStackTrace();

@@ -20,9 +20,9 @@ public class Catcher {
 	private final EV3TouchSensor bumperSensor;
 	
 	public Catcher(){
-		gripMotorPort = MotorPort.D;
+		gripMotorPort = MotorPort.A;
 		gripMotor = new EV3LargeRegulatedMotor(gripMotorPort);
-		gripSensorPort = LocalEV3.get().getPort("S4");
+		gripSensorPort = LocalEV3.get().getPort("S2");
 		bumperSensor = new EV3TouchSensor(gripSensorPort);
 	}
 	
@@ -32,7 +32,7 @@ public class Catcher {
 	public void catchPuck(){		
 		gripMotor.setSpeed(600);
 		gripMotor.backward();
-		Delay.msDelay(1600);
+		Delay.msDelay(1400);
 		gripMotor.stop();
 	}
 	/**
@@ -41,7 +41,7 @@ public class Catcher {
 	public void releasePuck(){
 		gripMotor.setSpeed(600);
 		gripMotor.forward();
-		Delay.msDelay(1600);
+		Delay.msDelay(1400);
 		gripMotor.stop();
 	}
 	/**
